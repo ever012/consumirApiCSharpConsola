@@ -1,11 +1,12 @@
 ﻿//primer sedefine la url de la api
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 var url = "https://localhost:44368/compras/ListarCompras";
 var urlagregar = "https://localhost:44368/compras/agregarCompra";
-var urlmodificar = "https://localhost:44368/compras/ListarCompras";
-var urleliminar = "https://localhost:44368/compras/ListarCompras";
+var urlmodificar = "https://localhost:44368/compras/actualizarCompra";
+var urleliminar = "https://localhost:44368/compras/eliminarCompra";
 JsonSerializerOptions options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }; //para que ignore diferenciar entre mayuscula y minuscula
 
 using (var httpClient = new HttpClient())
@@ -22,7 +23,7 @@ using (var httpClient = new HttpClient())
         }
     }
     else { Console.WriteLine("hubo un error"); }*/
-    
+
 
     //POST
     /*var response = await httpClient.PostAsJsonAsync(urlagregar, new Compras {
@@ -41,17 +42,19 @@ using (var httpClient = new HttpClient())
     });
     if (response.IsSuccessStatusCode)
     {
-        Console.WriteLine("Empleado agregado");
+        Console.WriteLine("Compra agregado");
 
     }else {Console.WriteLine("Error "); }
     */
 
-    var response = await httpClient.PutAsJsonAsync(url, new Compras {
+    //PATCH
+    /*var serializedData = JsonSerializer.Serialize(new Compras
+    {
         id = 10,
         fechaEmision = DateTime.Parse("2023-09-21"),
         numeroDelDoc = 8888,
         nrc = "string",
-        nombreProveedor = "11string",
+        nombreProveedor = "12string",
         comprasExentasInternas = 0,
         comprasImportIntern = 0,
         comprasGrabadasInternas = 0,
@@ -60,8 +63,34 @@ using (var httpClient = new HttpClient())
         anticipoACuentaIvaRetenido = 0,
         anticipoACuentaIvaRecibido = 0,
         total = 0
-    }).
+    });
+    var content = new StringContent(serializedData, Encoding.UTF8, "application/json");
+    var response = await httpClient.PatchAsync(urlmodificar, content);
+    if (response.IsSuccessStatusCode)
+    {
+        Console.WriteLine("Compra actualizado");
 
+    }
+    else { Console.WriteLine("Error "); }*/
+
+    var serializedData = JsonSerializer.Serialize(new Compras
+    {
+        id = 10
+    });
+    var content = new StringContent(serializedData, Encoding.UTF8, "application/json");
+    var request = new HttpRequestMessage
+    {
+        Method = HttpMethod.Delete,
+        RequestUri = new Uri(urleliminar),
+        Content = content
+    };
+    var response = await httpClient.SendAsync(request);
+    if (response.IsSuccessStatusCode)
+    {
+        Console.WriteLine("Compra eliminada");
+
+    }
+    else { Console.WriteLine("Error "); }
     Console.ReadKey();
 
 }
