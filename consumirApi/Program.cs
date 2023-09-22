@@ -95,6 +95,52 @@ using (var httpClient = new HttpClient())
 
 }
 
+
+
+
+
+//OPCION 2
+/*
+public class CRUDCompras
+{
+    string url = "https://localhost:44368/compras/ListarCompras";
+    string urlagregar = "https://localhost:44368/compras/agregarCompra";
+    string urlmodificar = "https://localhost:44368/compras/actualizarCompra";
+    string urleliminar = "https://localhost:44368/compras/eliminarCompra";
+
+    private readonly HttpClient _httpClient;
+    public CRUDCompras()
+    {
+        _httpClient = new HttpClient();
+    }
+    public async Task listaGet()
+    {
+        var response = await _httpClient.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            var respult = await response.Content.ReadAsStringAsync();
+            var compras = JsonSerializer.Deserialize<List<Compras>>(respult);
+            foreach(var item in compras)
+            {
+                Console.WriteLine(item.nombreProveedor);
+            }
+        }else { Console.WriteLine("error"); }
+    }
+    static async Task Main()
+    {
+        CRUDCompras crudCompras = new CRUDCompras();
+        await crudCompras.listaGet();
+    }
+
+}
+ 
+ */
+
+
+
+
+
+
 public class Compras
 {
     public int? id { get; set; }
